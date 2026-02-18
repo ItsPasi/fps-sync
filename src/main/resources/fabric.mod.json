@@ -3,7 +3,7 @@
 	"id": "fps-sync",
 	"version": "${version}",
 	"name": "FPS-Sync",
-	"description": "Limits FPS to the monitors refresh rate without V-Sync",
+	"description": "Limits FPS to the monitors refresh rate without V-Sync.",
 	"authors": [
 		"Pasi"
 	],
