@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/ItsPasi/fps-sync/blob/master/docs/Mod%20Icon%20Animated.webp?raw=true">
+    <img src="https://github.com/ItsPasi/fps-sync/blob/master/docs/Mod%20Icon%20Animation%20Small.webp?raw=true">
     <h1 align="center">FPS-Sync</h1>
 </p>
 
