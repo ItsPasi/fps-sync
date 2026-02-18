@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "fps-sync",
+	"version": "${version}",
+	"name": "FPS-Sync",
+	"description": "Limits FPS to the monitors refresh rate without V-Sync",
+	"authors": [
+		"Pasi"
+	],
+	"license": "LGPL-3.0",
+	"icon": "assets/fps-sync/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["com.fpssync.FpsSyncMod"]
+	},
+	"mixins": [
+		"fps-sync.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
