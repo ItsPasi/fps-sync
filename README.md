@@ -1,0 +1,8 @@
+<p align="center">
+    <img src="https://github.com/ItsPasi/fps-sync/blob/master/docs/Mod%20Icon%20Animated.webp?raw=true">
+    <h1 align="center">FPS-Sync</h1>
+</p>
+
+FPS-Sync automatically caps your framerate to your monitor's refresh rate.
+
+The FPS slider in Minecraft now includes a new "FPS-Sync" option at the leftmost position. Select it to enable the mod.
