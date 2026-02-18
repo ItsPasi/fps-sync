@@ -3,8 +3,7 @@
     <h1 align="center">FPS-Sync</h1>
 </p>
 
-FPS-Sync automatically caps your framerate to your monitor's refresh rate.
-
+FPS-Sync automatically caps your framerate to your monitor's refresh rate. This is different to V-Sync and doesn't add input lag to the game.
 The FPS slider in Minecraft now includes a new "FPS-Sync" option at the leftmost position. Select it to enable the mod.
 
 <img src="https://github.com/ItsPasi/fps-sync/blob/master/docs/Settings%20Menu.png?raw=true">
