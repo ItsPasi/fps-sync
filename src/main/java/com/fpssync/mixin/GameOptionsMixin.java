@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 
 @Mixin(GameOptions.class)
 public class GameOptionsMixin {
@@ -22,33 +20,44 @@ public class GameOptionsMixin {
     @Shadow @Final @Mutable
     private SimpleOption<Integer> maxFps;
 
-    // Replaces the vanilla FPS slider with a stepped 0-260 range, where 0 = FPS Sync
-    @Inject(method = "<init>", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/option/GameOptions;load()V",
-            shift = At.Shift.BEFORE))
+    @Inject(method = "<init>", at = @At("TAIL"))
     private void overrideFpsSlider(CallbackInfo ci) {
         this.maxFps = new SimpleOption<>(
                 "options.framerateLimit",
                 SimpleOption.emptyTooltip(),
                 (optionText, value) -> {
-                    if (value == 0) return Text.literal("FPS-Sync");
-                    if (value == 260) return Text.translatable("options.framerateLimit.max");
+                    if (value == 0) return Text.literal("FPS Sync");
+                    if (value > 1000) return Text.translatable("options.framerateLimit.max");
                     return Text.translatable("options.framerate", value);
                 },
-                new SimpleOption.ValidatingIntSliderCallbacks(0, 26).withModifier(
-                        (IntFunction<Integer>) sliderPos -> sliderPos * 10,
-                        (ToIntFunction<Integer>) value -> Math.min(value / 10, 26),
+                new SimpleOption.ValidatingIntSliderCallbacks(0, 101).withModifier(
+                        sliderPos -> {
+                            if (sliderPos == 0) return 0;
+                            if (sliderPos == 101) return 1010;
+                            return sliderPos * 10;
+                        },
+                        value -> {
+                            if (value == 0) return 0;
+                            if (value > 1000) return 101;
+                            return Math.min(value / 10, 100);
+                        },
                         true
                 ),
-                Codec.intRange(0, 260),
+                Codec.intRange(0, 1010),
                 120,
                 value -> {
                     MinecraftClient client = MinecraftClient.getInstance();
-                    FrameLimiter.setEnabled(value == 0);
-                    if (client != null && client.getInactivityFpsLimiter() != null) {
-                        client.getInactivityFpsLimiter().setMaxFps(
-                                value == 0 ? Integer.MAX_VALUE : value
-                        );
+                    if (value == 0) {
+                        FrameLimiter.setEnabled(true);
+                        if (client != null && client.getInactivityFpsLimiter() != null) {
+                            client.getInactivityFpsLimiter().setMaxFps(Integer.MAX_VALUE);
+                        }
+                    } else {
+                        FrameLimiter.setEnabled(false);
+                        FrameLimiter.setManualLimit(value >= 1010 ? 0 : value);
+                        if (client != null && client.getInactivityFpsLimiter() != null) {
+                            client.getInactivityFpsLimiter().setMaxFps(value >= 1010 ? Integer.MAX_VALUE : value);
+                        }
                     }
                 }
         );

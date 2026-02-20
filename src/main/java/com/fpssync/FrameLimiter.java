@@ -3,19 +3,30 @@ package com.fpssync;
 public class FrameLimiter {
 
     private static long lastFrameTime = 0;
-    private static boolean enabled = false;
+    private static boolean fpsSyncEnabled = false;
+    private static int manualFpsLimit = 0;
 
     public static void setEnabled(boolean value) {
-        enabled = value;
+        fpsSyncEnabled = value;
+        lastFrameTime = 0;
+    }
+    public static void setManualLimit(int fps) {
+        manualFpsLimit = fps;
         lastFrameTime = 0;
     }
 
     public static void limitFrame() {
-        if (!enabled) return;
+        int targetFps;
 
-        MonitorInfoProvider.updateDisplayInfo();
+        if (fpsSyncEnabled) {
+            MonitorInfoProvider.updateDisplayInfo();
+            targetFps = MonitorInfoProvider.getRefreshRate();
+        } else if (manualFpsLimit > 0 && manualFpsLimit < 1010) {
+            targetFps = manualFpsLimit;
+        } else {
+            return; // Unlimited (manualFpsLimit == 0 or >= 1010)
+        }
 
-        int targetFps = MonitorInfoProvider.getRefreshRate();
         if (targetFps <= 0) return;
 
         long frameBudgetNs = 1_000_000_000L / targetFps;
@@ -27,10 +38,9 @@ public class FrameLimiter {
 
         if (now >= nextFrameTime) { lastFrameTime = now; return; }
 
-        // Sleep for most of the budget, spin-wait the final 1ms for precision
         try {
-            long sleepMs = (nextFrameTime - now) / 1_000_000L;
-            if (sleepMs > 1) Thread.sleep(sleepMs - 1);
+            long sleepMs = (nextFrameTime - now) / 1_000_000L - 1;
+            if (sleepMs > 0) Thread.sleep(sleepMs);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
