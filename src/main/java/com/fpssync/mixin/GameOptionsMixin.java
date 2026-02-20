@@ -20,7 +20,7 @@ public class GameOptionsMixin {
     @Shadow @Final @Mutable
     private SimpleOption<Integer> maxFps;
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void overrideFpsSlider(CallbackInfo ci) {
         this.maxFps = new SimpleOption<>(
                 "options.framerateLimit",
@@ -61,5 +61,6 @@ public class GameOptionsMixin {
                     }
                 }
         );
+        ((GameOptions)(Object)this).load();
     }
 }
