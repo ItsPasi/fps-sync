@@ -12,7 +12,7 @@ public class MonitorInfoProvider {
     private static long lastCheckTime = 0;
     private static final long CHECK_INTERVAL_NS = 1_000_000_000L;
 
-    // Checks for monitor changes at most once per second
+    // Checks for monitor changes
     public static void updateDisplayInfo() {
         long now = System.nanoTime();
         if (now - lastCheckTime < CHECK_INTERVAL_NS) return;
