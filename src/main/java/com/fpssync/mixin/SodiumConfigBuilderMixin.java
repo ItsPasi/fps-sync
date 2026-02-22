@@ -17,7 +17,7 @@ public abstract class SodiumConfigBuilderMixin {
                     ordinal = 3))
     public IntegerOptionBuilder redirectFpsSliderRange(
             IntegerOptionBuilder builder, int min, int max, int step) {
-        return builder.setRange(0, 1010, 10);
+        return builder.setRange(-10, 1010, 10);
     }
 
     @Redirect(method = "buildGeneralPage", remap = false,
@@ -27,6 +27,7 @@ public abstract class SodiumConfigBuilderMixin {
     public IntegerOptionBuilder redirectFpsValueFormatter(
             IntegerOptionBuilder builder, ControlValueFormatter original) {
         return builder.setValueFormatter(value -> {
+            if (value == -10) return Text.literal("FPS Sync");
             if (value == 0) return Text.literal("FPS Sync");
             if (value >= 1010) return Text.translatable("options.framerateLimit.max");
             return Text.translatable("options.framerate", value);
