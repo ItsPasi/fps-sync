@@ -1,6 +1,6 @@
 package com.fpssync;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -18,16 +18,15 @@ public class MonitorInfoProvider {
         if (now - lastCheckTime < CHECK_INTERVAL_NS) return;
         lastCheckTime = now;
 
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.getWindow() == null) return;
+        Minecraft client = Minecraft.getInstance();
 
-        long window = client.getWindow().getHandle();
+        long window = client.getWindow().handle();
         long monitor = GLFW.glfwGetWindowMonitor(window);
 
         // In windowed mode glfwGetWindowMonitor returns 0; detect from window position instead
         if (monitor == 0) {
             monitor = getMonitorFromWindowPosition(window,
-                    client.getWindow().getWidth(), client.getWindow().getHeight());
+                    client.getWindow().getScreenWidth(), client.getWindow().getScreenHeight());
         }
 
         if (monitor != lastMonitorHandle) {
