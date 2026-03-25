@@ -3,7 +3,7 @@ package com.fpssync.mixin;
 import net.caffeinemc.mods.sodium.api.config.option.ControlValueFormatter;
 import net.caffeinemc.mods.sodium.api.config.structure.IntegerOptionBuilder;
 import net.caffeinemc.mods.sodium.client.gui.SodiumConfigBuilder;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,10 +27,10 @@ public abstract class SodiumConfigBuilderMixin {
     public IntegerOptionBuilder redirectFpsValueFormatter(
             IntegerOptionBuilder builder, ControlValueFormatter original) {
         return builder.setValueFormatter(value -> {
-            if (value == -10) return Component.literal("FPS Sync");
-            if (value == 0) return Component.literal("FPS Sync");
-            if (value >= 1010) return Component.translatable("options.framerateLimit.max");
-            return Component.translatable("options.framerate", value);
+            if (value == -10) return Text.literal("FPS Sync");
+            if (value == 0) return Text.literal("FPS Sync");
+            if (value >= 1010) return Text.translatable("options.framerateLimit.max");
+            return Text.translatable("options.framerate", value);
         });
     }
 }
