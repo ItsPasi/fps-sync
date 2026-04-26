@@ -5,7 +5,8 @@
 	"mixins": [
 		"GameRendererMixin",
 		"GameOptionsMixin",
-		"SodiumConfigBuilderMixin"
+		"SodiumConfigBuilderMixin",
+		"InactivityFpsLimiterMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

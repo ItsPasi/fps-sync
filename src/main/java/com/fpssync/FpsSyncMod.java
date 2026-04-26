@@ -8,7 +8,7 @@ public class FpsSyncMod implements ClientModInitializer {
     public void onInitializeClient() {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             int value = client.options.getMaxFps().getValue();
-            if (value == -10) {
+            if (value <= 0) {
                 FrameLimiter.setEnabled(true);
                 if (client.getInactivityFpsLimiter() != null) {
                     client.getInactivityFpsLimiter().setMaxFps(Integer.MAX_VALUE);

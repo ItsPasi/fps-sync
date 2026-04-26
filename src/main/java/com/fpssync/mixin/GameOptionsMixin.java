@@ -26,28 +26,27 @@ public class GameOptionsMixin {
                 "options.framerateLimit",
                 SimpleOption.emptyTooltip(),
                 (optionText, value) -> {
-                    if (value == -10) return Text.literal("FPS Sync");
+                    if (value <= 0) return Text.literal("FPS Sync");
                     if (value > 1000) return Text.translatable("options.framerateLimit.max");
                     return Text.translatable("options.framerate", value);
                 },
                 new SimpleOption.ValidatingIntSliderCallbacks(0, 101).withModifier(
                         sliderPos -> {
-                            if (sliderPos == 0) return -10;
-                            if (sliderPos == 101) return 1010;
+                            if (sliderPos == 0) {return -10;}
+                            if (sliderPos >= 101) {return 1010;}
                             return sliderPos * 10;
                         },
                         value -> {
-                            if (value < 0) return 0;
-                            if (value > 1000) return 101;
+                            if (value <= 0) {return 0;}
+                            if (value >= 1010) {return 101;}
                             return Math.min(value / 10, 100);
-                        },
-                        true
+                        }
                 ),
                 Codec.intRange(-10, 1010),
                 120,
                 value -> {
                     MinecraftClient client = MinecraftClient.getInstance();
-                    if (value == -10) {
+                    if (value <= 0) {
                         FrameLimiter.setEnabled(true);
                         if (client != null && client.getInactivityFpsLimiter() != null) {
                             client.getInactivityFpsLimiter().setMaxFps(Integer.MAX_VALUE);
