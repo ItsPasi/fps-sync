@@ -17,8 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameOptions.class)
 public class GameOptionsMixin {
 
-    @Shadow @Final @Mutable
-    private SimpleOption<Integer> maxFps;
+    @Shadow @Final @Mutable private SimpleOption<Integer> maxFps;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void overrideFpsSlider(CallbackInfo ci) {
@@ -26,8 +25,8 @@ public class GameOptionsMixin {
                 "options.framerateLimit",
                 SimpleOption.emptyTooltip(),
                 (optionText, value) -> {
-                    if (value <= 0) return Text.literal("FPS Sync");
-                    if (value > 1000) return Text.translatable("options.framerateLimit.max");
+                    if (value <= 0) {return Text.literal("FPS Sync");}
+                    if (value >= 1010) {return Text.translatable("options.framerateLimit.max");}
                     return Text.translatable("options.framerate", value);
                 },
                 new SimpleOption.ValidatingIntSliderCallbacks(0, 101).withModifier(
@@ -48,15 +47,20 @@ public class GameOptionsMixin {
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (value <= 0) {
                         FrameLimiter.setEnabled(true);
-                        if (client != null && client.getInactivityFpsLimiter() != null) {
-                            client.getInactivityFpsLimiter().setMaxFps(Integer.MAX_VALUE);
+                        FrameLimiter.setManualLimit(0);
+
+                        if (client != null && client.getWindow() != null) {
+                            client.getWindow().setFramerateLimit(Integer.MAX_VALUE);
                         }
-                    } else {
-                        FrameLimiter.setEnabled(false);
-                        FrameLimiter.setManualLimit(value >= 1010 ? 0 : value);
-                        if (client != null && client.getInactivityFpsLimiter() != null) {
-                            client.getInactivityFpsLimiter().setMaxFps(value >= 1010 ? Integer.MAX_VALUE : value);
-                        }
+
+                        return;
+                    }
+
+                    FrameLimiter.setEnabled(false);
+                    FrameLimiter.setManualLimit(value >= 1010 ? 0 : value);
+
+                    if (client != null && client.getWindow() != null) {
+                        client.getWindow().setFramerateLimit(value >= 1010 ? Integer.MAX_VALUE : value);
                     }
                 }
         );

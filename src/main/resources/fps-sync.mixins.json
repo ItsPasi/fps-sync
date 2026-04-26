@@ -6,7 +6,7 @@
 		"GameRendererMixin",
 		"GameOptionsMixin",
 		"SodiumConfigBuilderMixin",
-		"InactivityFpsLimiterMixin"
+		"WindowMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
