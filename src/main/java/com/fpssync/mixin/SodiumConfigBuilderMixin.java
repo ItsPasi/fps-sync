@@ -1,8 +1,7 @@
 package com.fpssync.mixin;
 
-import net.caffeinemc.mods.sodium.client.gui.options.Option;
-import net.caffeinemc.mods.sodium.client.gui.options.control.ControlValueFormatter;
-import net.caffeinemc.mods.sodium.client.gui.options.control.SliderControl;
+import me.jellysquid.mods.sodium.client.gui.options.Option;
+import me.jellysquid.mods.sodium.client.gui.options.control.ControlValueFormatter;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.*;
@@ -10,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = SliderControl.class, remap = false)
+@Mixin(targets = "me.jellysquid.mods.sodium.client.gui.options.control.SliderControl", remap = false)
 public abstract class SodiumConfigBuilderMixin {
 
     @Mutable @Shadow @Final private int min;
@@ -22,7 +21,7 @@ public abstract class SodiumConfigBuilderMixin {
     private void fpssync$modifyFpsSlider(Option<Integer> option, int min, int max, int interval, ControlValueFormatter mode, CallbackInfo ci) {
         if (!fpssync$isFramerateLimitOption(option, min, max, interval)) {return;}
 
-        this.min = -10;
+        this.min = 0;
         this.max = 1010;
         this.interval = 10;
         this.mode = value -> {

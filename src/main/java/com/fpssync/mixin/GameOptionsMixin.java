@@ -31,7 +31,7 @@ public class GameOptionsMixin {
                 },
                 new SimpleOption.ValidatingIntSliderCallbacks(0, 101).withModifier(
                         sliderPos -> {
-                            if (sliderPos == 0) {return -10;}
+                            if (sliderPos == 0) {return 0;}
                             if (sliderPos >= 101) {return 1010;}
                             return sliderPos * 10;
                         },
@@ -41,7 +41,7 @@ public class GameOptionsMixin {
                             return Math.min(value / 10, 100);
                         }
                 ),
-                Codec.intRange(-10, 1010),
+                Codec.intRange(0, 1010),
                 120,
                 value -> {
                     MinecraftClient client = MinecraftClient.getInstance();
